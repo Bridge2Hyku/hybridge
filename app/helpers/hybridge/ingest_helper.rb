@@ -1,4 +1,4 @@
 module Hybridge
-  module HelloHelper
+  module IngestHelper
   end
 end

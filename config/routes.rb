@@ -1,5 +1,5 @@
 Hybridge::Engine.routes.draw do
-  get 'hello/index'
+  get 'ingest/index'
 
-  root to: "hello#index"
+  root to: "ingest#index"
 end
