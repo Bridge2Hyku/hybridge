@@ -1,1 +1,37 @@
-<h1>Ingest</h1>
+<%= form_tag hybridge.perform_path do %>
+<div class="col-xs-12 main-header">
+  <h1><span class="fa fa-magic"></span> HyBridge Ingest</h1>
+  <div class="pull-right">
+    <%= button_tag("Ingest Selected", type: "submit", class: "btn btn-large btn-primary") %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span>Select csv packages to ingest</span>
+      </div>
+      <div class="panel-body">
+        <table class="table table-condensed">
+          <thead>
+            <th scope="col">Select</th>
+            <th scope="col">Filename</th>
+          </thead>
+          <tbody>
+            <% @packages.each do |package| %>
+              <tr>
+                <td class="col-md-1">
+                  <label for="package_id_">
+                    <%= check_box_tag 'package_id[]', package %>
+                  </label>
+                </td>
+                <td class="col-md-11"><%= package %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

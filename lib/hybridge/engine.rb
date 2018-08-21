@@ -7,7 +7,6 @@ module Hybridge
       paths = ActionController::Base.view_paths.collect{|p| p.to_s}
       paths = paths.unshift(hybridge_root + '/app/views')
       ActionController::Base.view_paths = paths
-      Rails.logger.info "paths: #{paths}"
     end
   end
 end
