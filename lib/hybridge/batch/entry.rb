@@ -52,6 +52,7 @@ module Hybridge
         @files.each do |file_object|
           file_path = file_location(file_object["Filename"])
           if !File.file?(file_path)
+            # TODO: send error if missing file
             next
           end
 
@@ -75,7 +76,7 @@ module Hybridge
           "contributor" => :contributor,
           "abstract / summary" => :description,
           "license" => :license,
-          "Publisher" => :publisher,
+          "publisher" => :publisher,
           "date created" => :date_created,
           "subject" => :subject,
           "language" => :language,
