@@ -18,5 +18,4 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 5.1.6"
   s.add_dependency "config"
-  s.add_dependency "with_locking"
 end
