@@ -17,6 +17,7 @@ module Hybridge
       else
         params[:package_id].each do | package |
           package_location = staged!(File.join(location, package))
+          next if package_location.nil?
           Hybridge::IngestPackageJob.perform_later(package_location, current_user)
         end
         flash[:notice] = "Successfully started the ingest process. This can take awhile"
@@ -49,7 +50,10 @@ module Hybridge
     end
 
     def staged!(filename)
-      # TODO: error if filename doesn't exist
+      if !File.file?(filename)
+        flash[:error] = "Unable to find #{package}. Please contact your System Administrator for assistance"
+        return nil
+      end
       new_filename = filename + '.staged'
       File.rename(filename, new_filename)
       new_filename
