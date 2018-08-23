@@ -17,8 +17,7 @@ module Hybridge
 
         work_attributes = field_attributes(work_form, work_type)
 
-        # TODO: display missing required_fields error
-        # missing = work_attributes.keys - work_type.required_fields
+        # TODO: check for required_fields and send error
 
         work_type.apply_depositor_metadata(@current_user)
         work_type.attributes = work_attributes

@@ -9,7 +9,8 @@ module Hybridge
       end
 
       def load!
-        # TODO: Throw error if not staged?
+        # TODO: Send error if missing staged?
+
         processing!
         @works = []
         @files = {}
