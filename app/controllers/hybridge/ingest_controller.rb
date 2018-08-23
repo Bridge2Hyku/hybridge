@@ -12,6 +12,16 @@ module Hybridge
     end
 
     def perform
+      if params[:package_id].nil?
+        flash[:error] = "Unable to find selected file in source directory. Please contact your System Administrator"
+      else
+        params[:package_id].each do | package |
+          package_location = staged!(File.join(location, package))
+          Hybridge::IngestPackageJob.perform_later(package_location, current_user)
+        end
+        flash[:notice] = "Successfully started the ingest process. This can take awhile"
+      end
+      redirect_to hybridge.root_path
     end
 
     private
@@ -36,6 +46,13 @@ module Hybridge
       files = files.collect do |file|
         Pathname.new(file).relative_path_from(base_path)
       end
+    end
+
+    def staged!(filename)
+      # TODO: error if filename doesn't exist
+      new_filename = filename + '.staged'
+      File.rename(filename, new_filename)
+      new_filename
     end
 
   end

@@ -1,0 +1,10 @@
+require 'hybridge/batch'
+module Hybridge
+  class IngestPackageJob < ApplicationJob
+    queue_as :hybridge_ingest_package
+
+    def perform(package_location, current_user)
+      Hybridge::Batch::Ingest.new(package_location, current_user)
+    end
+  end
+end
