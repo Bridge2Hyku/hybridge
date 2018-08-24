@@ -24,6 +24,17 @@ Finally:
 
     $ rails g hybridge:install
 
+### Hyku Settings
+
+Add the following to your Hyku settings file in `config/settings.yml` or `config/settings/<environment>.yml`
+
+```ruby
+hybridge:
+  filesystem: /path/to/ingest/packages
+```
+
+The HyBridge filesystem is the location where ingest packages will be stored for use in HyBridge. Create directories in the HyBridge filesystem location for every Multi tenant domain/repository installed using the repositories CNAME. Example: `/path/to/ingest/packages/myrepository.example.com`
+
 ## Usage
 
 TODO: Write usage instructions here
