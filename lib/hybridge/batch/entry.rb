@@ -28,9 +28,8 @@ module Hybridge
 
       def field_attributes(work_form, work_type)
         data = {}
-        hash = fields
         @work.each do |key, attribute|
-          field_sym = hash[key.downcase].presence
+          field_sym = field_to_sym(key)
           if (field_sym.nil? || attribute.nil? || attribute.empty? || key.to_s.include?("Object Type") || !work_form.terms.include?(field_sym))
             next
           elsif(work_type.send(field_sym).nil?)
@@ -65,27 +64,16 @@ module Hybridge
         end
       end
 
-      def fields
-        # TODO: need to make this dynamic with Works
-        field_hash = {
-          "title" => :title,
-          "creator" => :creator,
-          "keyword" => :keyword,
-          "rights statement" => :rights_statement,
-          "contributor" => :contributor,
-          "abstract / summary" => :description,
-          "abstract or summary" => :description,
-          "license" => :license,
-          "publisher" => :publisher,
-          "date created" => :date_created,
-          "subject" => :subject,
-          "language" => :language,
-          "identifier" => :identifier,
-          "location" => :based_near,
-          "related url" => :related_url,
-          "source" => :source,
-          "resource type" => :resource_type
-        }
+      def field_to_sym(field)
+        if field.downcase == "abstract or summary"
+          field = "description"
+        elsif field.downcase == "abstract / summary"
+          field = "description"
+        elsif field.downcase == "location"
+          field = "based_near"
+        end
+
+        field.downcase.strip.gsub(/\s/,'_').to_sym
       end
 
     end
