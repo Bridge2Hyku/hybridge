@@ -74,15 +74,16 @@ module Hybridge
           "rights statement" => :rights_statement,
           "contributor" => :contributor,
           "abstract / summary" => :description,
+          "abstract or summary" => :description,
           "license" => :license,
           "publisher" => :publisher,
           "date created" => :date_created,
           "subject" => :subject,
           "language" => :language,
           "identifier" => :identifier,
-          "location" => :location,
+          "location" => :based_near,
           "related url" => :related_url,
-          "source" => :based_near,
+          "source" => :source,
           "resource type" => :resource_type
         }
       end
