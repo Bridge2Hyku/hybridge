@@ -17,11 +17,20 @@ module Hybridge
 
         work_attributes = field_attributes(work_form, work_type)
 
-        # TODO: check for required_fields and send error
+        missing = work_form.required_fields - work_attributes.keys
+        if !missing.empty?
+          message = "Missing required fields: #{missing.map{|m| m.to_s.inspect}.join(', ')} for '#{work_attributes[:title].first}'"
+          Hyrax::MessengerService.deliver(User.batch_user, @current_user, message, "HyBridge Warning: Missing required fields")
+        end
 
         work_type.apply_depositor_metadata(@current_user)
         work_type.attributes = work_attributes
-        work_type.save
+        
+        if !work_type.save
+          message = "Unable to create work for '#{work_attributes[:title].first}'. Please contact your system administrator."
+          Hyrax::MessengerService.deliver(User.batch_user, @current_user, message, "HyBridge Error: System Error")
+          return
+        end
 
         process_files! work_type unless @files.nil?
       end
@@ -50,7 +59,8 @@ module Hybridge
         @files.each do |file_object|
           file_path = file_location(file_object["Filename"])
           if !File.file?(file_path)
-            # TODO: send error if missing file
+            message = "Unable to find file '#{file_object["Filename"]}' for '#{work_type[:title].first.to_s}'"
+            Hyrax::MessengerService.deliver(User.batch_user, @current_user, message, "HyBridge Warning: Missing file")
             next
           end
 

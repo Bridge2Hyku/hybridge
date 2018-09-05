@@ -9,7 +9,8 @@ module Hybridge
       end
 
       def load!
-        # TODO: Send error if missing staged?
+
+        return unless staged? || processing?
 
         processing!
         @works = []
@@ -42,14 +43,22 @@ module Hybridge
         @file = new_file
       end
 
-      def staged?
-        File.file?(Pathname(@file).sub_ext '' + ".staged")
-      end
-
       def processed!
         new_file = Pathname(@file).sub_ext '' + ".processed"
         File.rename(@file, new_file)
         @file = new_file
+      end
+
+      def processing?
+        File.file?(Pathname(@file).sub_ext '' + ".processing")
+      end
+
+      def processed?
+        File.file?(Pathname(@file).sub_ext '' + ".processed")
+      end
+
+      def staged?
+        File.file?(Pathname(@file).sub_ext '' + ".staged")
       end
 
     end
