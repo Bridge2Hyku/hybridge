@@ -64,13 +64,11 @@ module Hybridge
             next
           end
 
-          file = Hyrax::UploadedFile.new(user: @current_user, file: File.new(file_path))
           file_actor = Hyrax::Actors::FileSetActor.new(FileSet.create, @current_user)
           file_actor.create_metadata
-          file_actor.create_content(file)
+          file_actor.create_content(File.new(file_path))
           file_actor.attach_to_work(work_type)
           file_actor.file_set.permissions_attributes = work_permissions
-          file.update(file_set_uri: file_actor.file_set.uri)
         end
       end
 
