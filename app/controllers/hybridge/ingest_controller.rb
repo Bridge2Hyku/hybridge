@@ -8,7 +8,9 @@ module Hybridge
 
     def index
       add_breadcrumbs
-      @packages = packages
+      @packages = packages('csv')
+      @processing = packages('processing', true)
+      @processed = packages('processed', true)
     end
 
     def perform
@@ -41,11 +43,15 @@ module Hybridge
       File.join(Settings.hybridge.filesystem, @account.cname)
     end
 
-    def packages
-      files = Dir.glob(location + '/**/*.csv')
+    def packages(ext, hideext=false)
+      files = Dir.glob(location + "/**/*.#{ext}")
       base_path = Pathname.new(location)
       files = files.collect do |file|
-        Pathname.new(file).relative_path_from(base_path)
+        path = Pathname.new(file).relative_path_from(base_path)
+        if hideext
+          path = "#{File.dirname(path)}/#{File.basename(path, ".#{ext}")}"
+        end
+        path
       end
     end
 

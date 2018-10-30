@@ -35,3 +35,49 @@
   </div>
 </div>
 <% end %>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span>Packages currently processing</span>
+      </div>
+      <div class="panel-body">
+        <table class="table table-condensed">
+          <thead>
+            <th scope="col">Filename</th>
+          </thead>
+          <tbody>
+            <% @processing.each do |package| %>
+              <tr>
+                <td class="col-md-11"><%= package %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span>Packages processed</span>
+      </div>
+      <div class="panel-body">
+        <table class="table table-condensed">
+          <thead>
+            <th scope="col">Filename</th>
+          </thead>
+          <tbody>
+            <% @processed.each do |package| %>
+              <tr>
+                <td class="col-md-11"><%= package %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
