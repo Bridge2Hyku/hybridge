@@ -23,14 +23,8 @@ module Hybridge
           Hyrax::MessengerService.deliver(User.batch_user, @current_user, message, "HyBridge Warning: Missing required fields")
         end
 
-        work_type.apply_depositor_metadata(@current_user)
-        work_type.attributes = work_attributes
-        
-        if !work_type.save
-          message = "Unable to create work for '#{work_attributes[:title].first}'. Please contact your system administrator."
-          Hyrax::MessengerService.deliver(User.batch_user, @current_user, message, "HyBridge Error: System Error")
-          return
-        end
+        env = Hyrax::Actors::Environment.new(work_type, Ability.new(@current_user), work_attributes)
+        work_actor = Hyrax::CurationConcern.actor.create(env)
 
         process_files! work_type unless @files.nil?
       end
@@ -41,6 +35,8 @@ module Hybridge
           field_sym = field_to_sym(key)
           if (field_sym.nil? || attribute.nil? || attribute.empty? || key.to_s.include?("Object Type") || !work_form.terms.include?(field_sym))
             next
+          elsif(field_sym.id2name == "based_near")
+            data[:based_near_attributes] = based_near_attributes(attribute.split("; "))
           elsif(work_type.send(field_sym).nil?)
             data[field_sym] = attribute
           else
@@ -48,6 +44,14 @@ module Hybridge
           end
         end
         data
+      end
+
+      def based_near_attributes(values)
+        based_near_values = {}
+        values.each_with_index do |value, index|
+          based_near_values[index.to_s] = { "id" => value, "_destroy" => "" }
+        end
+        based_near_values
       end
 
       def file_location(filename)
