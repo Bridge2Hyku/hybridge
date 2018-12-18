@@ -21,11 +21,11 @@ module Hybridge
           type = row.first.last
           if type.nil?
             next
-          elsif(type.include? "Work")
+          elsif Hyrax.config.registered_curation_concern_types.include? type
             row.delete("Filename")
             @works << row
             @files[@works.length] = []
-          elsif(type.include? "File")
+          elsif type.include? "File"
             row.delete("Object Type")
             @files[@works.length] << row
           end
