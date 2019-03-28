@@ -37,6 +37,14 @@ module Hybridge
             next
           elsif(field_sym.id2name == "based_near")
             data[:based_near_attributes] = based_near_attributes(attribute.split("; "))
+          elsif(field_sym.id2name == "rights_statement")
+            active = Hyrax.config.rights_statement_service_class.new.active?(attribute) rescue false
+            if active
+              data[field_sym] = attribute
+            else
+              message = "Invalid/Inactive Rights Statement URL '#{attribute}' for '#{data[:title].first.to_s}'"
+              Hyrax::MessengerService.deliver(User.batch_user, @current_user, message, "HyBridge Warning: Invalid/Inactive Rights Statement URL")
+            end
           elsif(work_type.send(field_sym).nil?)
             data[field_sym] = attribute
           else
