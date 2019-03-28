@@ -15,19 +15,28 @@ module Hybridge
         processing!
         @works = []
         @files = {}
+        good_work = false
 
         @csv = CSV.parse(File.read(@file), headers: true, encoding: 'utf-8').map(&:to_hash)
         @csv.each do |row|
           type = row.first.last
           if type.nil?
+            good_work = false
             next
           elsif Hyrax.config.registered_curation_concern_types.include? type
+            good_work = true
             row.delete("Filename")
             @works << row
             @files[@works.length] = []
           elsif type.include? "File"
-            row.delete("Object Type")
-            @files[@works.length] << row
+            if good_work
+              row.delete("Object Type")
+              @files[@works.length] << row
+            end
+          else
+            good_work = false
+            message = "Unknown work type '#{type}'"
+            Hyrax::MessengerService.deliver(User.batch_user, @current_user, message, "HyBridge Warning: Unknown work type")
           end
         end
 
