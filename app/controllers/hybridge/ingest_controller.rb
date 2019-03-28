@@ -36,11 +36,15 @@ module Hybridge
     end
 
     def set_current_account
-      @account = Site.account
+      @account = Site.account rescue nil
     end
 
     def location
-      File.join(Settings.hybridge.filesystem, @account.cname)
+      if @account.nil?
+        Settings.hybridge.filesystem
+      else
+        File.join(Settings.hybridge.filesystem, @account.cname)
+      end
     end
 
     def packages(ext, hideext=false)
