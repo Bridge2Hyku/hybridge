@@ -17,6 +17,7 @@
           <thead>
             <th scope="col">Select</th>
             <th scope="col">Filename</th>
+            <th scope="col" class="text-right">Collection</th>
           </thead>
           <tbody>
             <% @packages.each do |package| %>
@@ -26,7 +27,12 @@
                     <%= check_box_tag 'package_id[]', package %>
                   </label>
                 </td>
-                <td class="col-md-11"><%= package %></td>
+                <td class="col-md-7"><%= package %></td>
+                <td class="col-md-4 text-right">
+                  <label for="collection_id">
+                    <%= select_tag "collection_id[#{package}]", options_for_select(@collections.collect {|c| [ c[:title], c[:id] ] }), {:include_blank => '', :class => 'form-control select optional'} %>
+                  </label>
+                </td>
               </tr>
             <% end %>
           </tbody>

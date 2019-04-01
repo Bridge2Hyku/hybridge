@@ -2,9 +2,10 @@ module Hybridge
   module Batch
     class Entry
 
-      def initialize(work, files, current_user, package_location)
+      def initialize(work, files, collection_id, current_user, package_location)
         @work = work
         @files = files
+        @collection_id = collection_id
         @current_user = current_user
         @package_location = package_location
 
@@ -50,6 +51,11 @@ module Hybridge
           else
             data[field_sym] = attribute.split "; "
           end
+
+          if !@collection_id.nil? && !@collection_id.empty?
+            data[:member_of_collections_attributes] = {"0" => { "id" => @collection_id, "_destroy" => "false" }}
+          end
+          
         end
         data
       end

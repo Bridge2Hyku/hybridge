@@ -2,8 +2,9 @@ module Hybridge
   module Batch
     class Ingest
 
-      def initialize(file, current_user)
+      def initialize(file, collection_id, current_user)
         @file = file
+        @collection_id = collection_id
         @current_user = current_user
         load!
       end
@@ -41,7 +42,7 @@ module Hybridge
         end
 
         @works.each_with_index do |work, index|
-          Entry.new(work, @files[index+1], @current_user, File.dirname(@file))
+          Entry.new(work, @files[index+1], @collection_id, @current_user, File.dirname(@file))
         end
         processed!
       end

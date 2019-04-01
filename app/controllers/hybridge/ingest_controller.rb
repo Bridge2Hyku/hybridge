@@ -6,11 +6,14 @@ module Hybridge
     before_action :set_current_account, :authenticate_user!
     skip_before_action :require_active_account!
 
+    delegate :title, :id, to: :solr_document
+
     def index
       add_breadcrumbs
       @packages = packages('csv')
       @processing = packages('processing', true)
       @processed = packages('processed', true)
+      @collections = collections
     end
 
     def perform
@@ -20,7 +23,8 @@ module Hybridge
         params[:package_id].each do | package |
           package_location = staged!(File.join(location, package))
           next if package_location.nil?
-          Hybridge::IngestPackageJob.perform_later(package_location, current_user)
+          collection_id = params[:collection_id][package]
+          Hybridge::IngestPackageJob.perform_later(package_location, collection_id, current_user)
         end
         flash[:notice] = "Successfully started the ingest process. This can take awhile"
       end
@@ -68,6 +72,24 @@ module Hybridge
       File.rename(filename, new_filename)
       new_filename
     end
+
+    def collections
+      colls = []
+      response = self.repository.search(collection_search_builder)
+      response.docs.each do |document|
+        colls << {
+          id: document.id,
+          title: document.title.first || document.title
+        }
+      end
+      colls
+    end
+
+    private
+
+      def collection_search_builder
+        Hyrax::CollectionSearchBuilder.new(self).rows(1000).with_access(:edit)
+      end
 
   end
 end
