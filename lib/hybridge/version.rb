@@ -1,3 +1,3 @@
 module Hybridge
-  VERSION = '0.2.0-beta.4'
+  VERSION = '1.0.0-beta.1'
 end
