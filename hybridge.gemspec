@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Leroy Vallejo", "Sean Watkins"]
   s.email       = ["llvallejo@uh.edu", "slwatkins@uh.edu"]
   s.homepage    = "https://github.com/Bridge2Hyku/HyBridge"
-  s.summary     = "This is the gemspec for the HyBridge tool."
-  s.description = "This gem will be installed into the Samvera Hyku application"
+  s.summary     = "HyBridge is a ingest tool for use in Samvera Hyku and Hyrax repositories."
+  s.description = "An ingest tool for Samvera Hyku and Hyrax repositories."
   s.license     = "Apache 2.0"
 
   s.files = Dir["{app,config,db,lib}/**/*", "LICENSE.txt", "Rakefile", "README.md"]
