@@ -9,7 +9,7 @@ Part of the [Bridge2Hyku](https://bridge2hyku.github.io/) project.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'hybridge', git: 'https://github.com/Bridge2Hyku/hybridge'
+gem 'hybridge'
 ```
 
 And then execute:
